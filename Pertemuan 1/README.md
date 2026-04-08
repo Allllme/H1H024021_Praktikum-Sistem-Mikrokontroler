@@ -29,8 +29,48 @@ Mekanisme menyala dan matinya LED sama persis, hanya arah traversalnya yang terb
 
 ### 4. Program 3 LED Kiri dan 3 LED Kanan Bergantian
 <img width="946" height="1085" alt="image" src="https://github.com/user-attachments/assets/6ad99c06-a1d3-4565-bb9a-b0d21a5cb604" />
-| Waktu | LED 1 | LED 2 | LED 3 | LED 4 | LED 5 | LED 6 |
-|-------|-------|-------|-------|-------|-------|-------|
-| 0 - 500ms | 🟡 ON | 🟡 ON | 🟡 ON | ⚫ OFF | ⚫ OFF | ⚫ OFF |
-| 500 - 1000ms | ⚫ OFF | ⚫ OFF | ⚫ OFF | 🟡 ON | 🟡 ON | 🟡 ON |
-| 1000ms+ | berulang... | | | | | |
+## Penjelasan Kode
+
+```cpp
+int timer = 100;
+```
+> Variabel `timer` menyimpan nilai delay dalam milidetik antar perpindahan LED.  
+> Nilai 100 ms berarti setiap LED menyala selama 0,1 detik sebelum berpindah.  
+> Semakin kecil nilainya → LED bergerak semakin cepat.
+
+```cpp
+for (int ledPin = 2; ledPin < 8; ledPin++) {
+    pinMode(ledPin, OUTPUT);
+}
+```
+> Perulangan `for` di `setup()` untuk menginisialisasi pin 2 sampai 7 sebagai OUTPUT.  
+> - Inisialisasi: `ledPin = 2` (mulai dari pin 2)  
+> - Kondisi: `ledPin < 8` (berjalan selama ledPin kurang dari 8, yaitu s/d pin 7)  
+> - Increment: `ledPin++` (bertambah 1 setiap iterasi)  
+> Lebih efisien daripada menulis 6 baris `pinMode()` secara manual.
+
+```cpp
+for (int ledPin = 2; ledPin < 8; ledPin++) {
+    digitalWrite(ledPin, HIGH);
+    delay(timer);
+    digitalWrite(ledPin, LOW);
+}
+```
+> **Perulangan 1 – LED bergerak kiri ke kanan (pin 2 → 7):**  
+> - `digitalWrite(ledPin, HIGH)` → LED pada pin saat ini **menyala**  
+> - `delay(timer)` → tahan 100ms agar mata bisa melihat LED  
+> - `digitalWrite(ledPin, LOW)` → LED pada pin saat ini **mati** sebelum berpindah  
+> Hanya satu LED yang menyala pada satu waktu, menciptakan ilusi gerakan.
+
+```cpp
+for (int ledPin = 7; ledPin >= 2; ledPin--) {
+    digitalWrite(ledPin, HIGH);
+    delay(timer);
+    digitalWrite(ledPin, LOW);
+}
+```
+> **Perulangan 2 – LED bergerak kanan ke kiri (pin 7 → 2):**  
+> - Inisialisasi: `ledPin = 7` (mulai dari pin 7, yaitu LED paling kanan)  
+> - Kondisi: `ledPin >= 2` (berjalan selama ledPin masih ≥ 2)  
+> - Decrement: `ledPin--` (berkurang 1 setiap iterasi, arah berlawanan)  
+> Mekanisme menyala dan mati sama dengan perulangan pertama.
