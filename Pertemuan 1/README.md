@@ -29,4 +29,8 @@ Mekanisme menyala dan matinya LED sama persis, hanya arah traversalnya yang terb
 
 ### 4. Program 3 LED Kiri dan 3 LED Kanan Bergantian
 <img width="946" height="1085" alt="image" src="https://github.com/user-attachments/assets/6ad99c06-a1d3-4565-bb9a-b0d21a5cb604" />
-
+| Waktu | LED 1 | LED 2 | LED 3 | LED 4 | LED 5 | LED 6 |
+|-------|-------|-------|-------|-------|-------|-------|
+| 0 - 500ms | 🟡 ON | 🟡 ON | 🟡 ON | ⚫ OFF | ⚫ OFF | ⚫ OFF |
+| 500 - 1000ms | ⚫ OFF | ⚫ OFF | ⚫ OFF | 🟡 ON | 🟡 ON | 🟡 ON |
+| 1000ms+ | berulang... | | | | | |
