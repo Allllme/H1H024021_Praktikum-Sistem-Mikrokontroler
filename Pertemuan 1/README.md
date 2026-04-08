@@ -11,6 +11,61 @@ Fungsi delay(timeDelay) menghentikan sementara eksekusi program selama durasi ti
 ## 4. Modifikasi: alur cepat → sedang → mati (tanpa langsung reset)
 Program dimodifikasi menggunakan variabel phase untuk melacak tahap saat ini: 
 <img width="733" height="1200" alt="image" src="https://github.com/user-attachments/assets/99af4328-b766-4756-bbe9-861fe446bca7" />
+## Penjelasan Kode
+
+```cpp
+const int ledPin = 6;
+```
+> Mendeklarasikan variabel konstan `ledPin` dengan nilai 6.  
+> Pin digital 6 akan digunakan sebagai output untuk LED.
+
+```cpp
+int timeDelay = 1000;
+```
+> Variabel `timeDelay` menyimpan nilai delay dalam milidetik.  
+> Dimulai dari 1000 ms (1 detik) → LED berkedip lambat di awal.
+
+```cpp
+pinMode(ledPin, OUTPUT);
+```
+> Mengonfigurasi pin 6 sebagai OUTPUT di dalam fungsi `setup()`.  
+> Hanya dijalankan sekali saat Arduino pertama kali dinyalakan.
+
+```cpp
+digitalWrite(ledPin, HIGH);
+delay(timeDelay);
+```
+> Mengirim logika HIGH (5V) ke pin LED → LED **menyala**.  
+> Program berhenti selama `timeDelay` ms sebelum melanjutkan.
+
+```cpp
+digitalWrite(ledPin, LOW);
+delay(timeDelay);
+```
+> Mengirim logika LOW (0V) ke pin LED → LED **mati**.  
+> Program berhenti lagi selama `timeDelay` ms (satu siklus kedip selesai).
+
+```cpp
+if (timeDelay <= 100) {
+```
+> **Kondisi if:** memeriksa apakah `timeDelay` sudah mencapai batas minimum (100 ms).  
+> Jika **benar** → LED sudah berkedip secepat mungkin, siap direset.
+
+```cpp
+    delay(3000);
+    timeDelay = 1000;
+```
+> Memberikan jeda 3 detik agar pengguna bisa mengamati kondisi reset.  
+> Kemudian `timeDelay` dikembalikan ke 1000 ms untuk memulai siklus baru.
+
+```cpp
+} else {
+    timeDelay -= 100;
+}
+```
+> **Kondisi else:** jika `timeDelay` masih di atas 100 ms.  
+> Nilai `timeDelay` dikurangi 100 ms → LED akan berkedip lebih cepat di iterasi berikutnya.
+
 
 ## Pertanyaan Analisis
 ## Schematic
