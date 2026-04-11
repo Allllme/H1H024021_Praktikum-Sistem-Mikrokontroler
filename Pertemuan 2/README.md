@@ -7,8 +7,8 @@ Schematic menghubungkan 8 segmen seven segment (a–g, dp) masing-masing melalui
 
 **2. Apa yang terjadi jika nilai `num` lebih dari 15?**
 
-Jika `num > 15`, fungsi `displayDigit()` akan mengakses `digitPattern[num]` di luar batas array (array hanya berindeks 0–15). Dalam C/C++ Arduino, akses out-of-bounds **tidak menyebabkan error kompilasi**, namun membaca nilai memori yang tidak terdefinisi (*garbage value*). Akibatnya:
-- Segmen yang menyala akan **acak dan tidak dapat diprediksi**
+Jika `num > 15`, fungsi `displayDigit()` akan mengakses `digitPattern[num]` di luar batas array (array hanya berindeks 0–15). Dalam C/C++ Arduino, akses out-of-bounds tidak menyebabkan error kompilasi, namun membaca nilai memori yang tidak terdefinisi (*garbage value*). Akibatnya:
+- Segmen yang menyala akan acak dan tidak dapat diprediksi
 - Berpotensi merusak nilai variabel lain di memori (undefined behavior)
 
 **Solusi:** Tambahkan guard clause di awal fungsi:
@@ -20,7 +20,7 @@ if (num < 0 || num > 15) return;
 
 **3. Apakah program menggunakan common cathode atau common anode? Jelaskan!**
 
-Program ini menggunakan **Common Cathode (CC)**. Buktinya:
+Program ini menggunakan Common Cathode (CC). Buktinya:
 - Segmen dinyalakan dengan nilai `1` (HIGH = 5V)
 - Pada Common Cathode, pin common terhubung ke GND
 - Arus mengalir dari pin Arduino → resistor → anoda LED → katoda → GND
@@ -32,8 +32,9 @@ Jika Common Anode yang digunakan, semua pola harus dibalik (nilai `0` untuk meny
 
 **4. Modifikasi program agar tampilan berjalan dari F ke 0**
 
-Perubahan utama: ubah iterasi loop dari ascending (`i=0; i<16; i++`) menjadi **descending** (`i=15; i>=0; i--`)
-## Counter F → 0 (Modifikasi)
+Perubahan utama: ubah iterasi loop dari ascending (`i=0; i<16; i++`) menjadi descending (`i=15; i>=0; i--`)
+
+**Counter F → 0 (Modifikasi)**
 ```cpp
 #include <Arduino.h>
 
@@ -114,7 +115,7 @@ Mode `INPUT_PULLUP` mengaktifkan **resistor pull-up internal ~20–50kΩ** pada 
 | Logika | Active-HIGH (perlu pull-down) | Active-LOW (lebih noise-immune) |
 | Kerumitan rangkaian | Lebih kompleks | Lebih sederhana |
 
-**Cara kerja:** Saat tombol tidak ditekan → pin terhubung ke VCC melalui pull-up → terbaca HIGH. Saat ditekan → pin terhubung langsung ke GND → terbaca LOW (lebih kuat dari VCC melalui pull-up).
+Cara kerja: Saat tombol tidak ditekan → pin terhubung ke VCC melalui pull-up → terbaca HIGH. Saat ditekan → pin terhubung langsung ke GND → terbaca LOW (lebih kuat dari VCC melalui pull-up).
 
 ---
 
@@ -135,16 +136,17 @@ Mode `INPUT_PULLUP` mengaktifkan **resistor pull-up internal ~20–50kΩ** pada 
 
 ---
 
-## Counter dengan 2 Push Button (Increment & Decrement)
+**4. Modifikasi rangkaian dan program dengan dua push button yang berfungsi sebagai 
+penambahan (increment) dan pengurangan (decrement) pada sistem counter**
 
-### Tambahan Wiring
+**Counter dengan 2 Push Button (Increment & Decrement)**
+Tambahan Wiring
 
 | Komponen | Pin Arduino |
 |----------|-------------|
 | Push Button UP (increment) | Pin 2 |
 | Push Button DOWN (decrement) | Pin 3 |
 
-### Source Code: `modul2_input_2button.ino`
 
 ```cpp
 #include <Arduino.h>
@@ -268,7 +270,7 @@ void loop() {
 
 ## Pertanyaan Umum (Bagian 2.7) ##
 
-**Q1: Uraikan hasil tugas pada praktikum setiap percobaan!**
+**1. Uraikan hasil tugas pada praktikum setiap percobaan!**
 
 **Percobaan 2A:**  
 Seven Segment berhasil menampilkan counter heksadesimal 0 → 1 → 2 → ... → F secara berurutan dengan interval 1 detik per digit, berjalan terus menerus (looping). Semua 16 karakter tampil sesuai pola digitPattern yang didefinisikan. Tidak ada segmen yang salah menyala.
@@ -278,7 +280,7 @@ Push Button berhasil diintegrasikan sebagai kontrol interaktif. Setiap kali tomb
 
 ---
 
-**Q2: Bagaimana prinsip kerja Seven Segment Display dalam menampilkan angka dan karakter?**
+**2. Bagaimana prinsip kerja Seven Segment Display dalam menampilkan angka dan karakter?**
 
 Seven Segment Display terdiri dari **7 segmen LED** (a, b, c, d, e, f, g) yang tersusun membentuk angka 8, ditambah satu titik desimal (dp). Setiap karakter ditampilkan dengan **mengaktifkan kombinasi segmen tertentu**:
 
@@ -298,14 +300,14 @@ Seven Segment Display terdiri dari **7 segmen LED** (a, b, c, d, e, f, g) yang t
 
 Pada **Common Cathode**:
 - Pin common = GND
-- Segmen menyala saat pin diberi **HIGH (5V)**
+- Segmen menyala saat pin diberi HIGH (5V)
 - Arus: Pin Arduino → Resistor 220Ω → Anoda LED → Katoda → GND
 
-Program menterjemahkan setiap digit ke **vektor biner 8-bit** dalam array `digitPattern[][]` yang menentukan pin mana yang HIGH atau LOW.
+Program menterjemahkan setiap digit ke vektor biner 8-bit dalam array `digitPattern[][]` yang menentukan pin mana yang HIGH atau LOW.
 
 ---
 
-**Q3: Jelaskan bagaimana sistem counter bekerja pada program tersebut!**
+**3. Jelaskan bagaimana sistem counter bekerja pada program tersebut!**
 
 **Percobaan 2A (Counter Otomatis):**
 ```
