@@ -144,6 +144,7 @@ Cara kerja: Saat tombol tidak ditekan â†’ pin terhubung ke VCC melalui pull-up â
 penambahan (increment) dan pengurangan (decrement) pada sistem counter**
 
 **Counter dengan 2 Push Button (Increment & Decrement)**
+
 **Tambahan Wiring**
 
 | Komponen | Pin Arduino |
