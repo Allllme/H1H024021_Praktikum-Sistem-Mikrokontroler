@@ -1,7 +1,9 @@
 ## Pertanyaan Praktikum ##
 **1. Gambarkan rangkaian schematic yang digunakan!**
 
-Schematic menghubungkan 8 segmen seven segment (a–g, dp) masing-masing melalui resistor 220Ω ke pin digital Arduino sesuai tabel wiring. Pin common cathode dihubungkan ke GND Arduino. Resistor 220Ω berfungsi membatasi arus agar tidak melebihi batas aman LED (~20mA): R = (5V – 2V) / 0,02A = 150Ω → pilih 220Ω (tersedia dan lebih aman).
+Schematic menghubungkan 0-9 segmen seven segment (a–f, dp) masing-masing melalui resistor 220Ω ke pin digital Arduino sesuai tabel wiring. Pin common cathode dihubungkan ke GND Arduino. Resistor 220Ω berfungsi membatasi arus agar tidak melebihi batas aman LED (~20mA): R = (5V – 2V) / 0,02A = 150Ω → pilih 220Ω.
+<img width="1147" height="703" alt="image" src="https://github.com/user-attachments/assets/491b8d69-1ffd-4120-8ed8-3598733d479d" />
+
 
 ---
 
@@ -101,6 +103,8 @@ void loop() {
 **1. Gambarkan rangkaian schematic yang digunakan!**
 
 Rangkaian 2B = rangkaian 2A + Push Button. Satu kaki tombol ke Pin 2, kaki lainnya ke GND. Resistor pull-up internal diaktifkan via `INPUT_PULLUP`, tidak perlu resistor eksternal.
+<img width="1077" height="699" alt="image" src="https://github.com/user-attachments/assets/28612051-b041-4c6a-8d97-9e58fc58593e" />
+
 
 ---
 
