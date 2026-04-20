@@ -15,7 +15,7 @@ Proses pengendalian LED melalui keyboard berlangsung sebagai berikut:
    - Jika `'0'` → `digitalWrite(PIN_LED, LOW)` → pin 8 = 0V → tidak ada beda potensial → **LED mati**
 8. **Konfirmasi output**: Arduino mengirimkan konfirmasi ("LED ON"/"LED OFF") kembali ke komputer via UART sehingga tampil di Serial Monitor.
 
-Seluruh proses ini terjadi dalam hitungan milidetik [[1]](#referensi).
+Seluruh proses ini terjadi dalam hitungan milidetik.
 
 ---
 
@@ -160,7 +160,7 @@ Keunggulan I2C: seluruh proses di atas hanya memerlukan 2 kabel untuk menghubung
 
 ### Pertanyaan 2: Apa yang terjadi jika pin kiri dan kanan potensiometer tertukar?
 
-Potensiometer berfungsi sebagai **voltage divider (pembagi tegangan)**. Tegangan pada wiper (kaki tengah) bergantung pada posisi putar.
+Potensiometer berfungsi sebagai voltage divider (pembagi tegangan). Tegangan pada wiper (kaki tengah) bergantung pada posisi putar.
 
 **Konfigurasi normal:**
 ```
@@ -269,7 +269,7 @@ Baris 2: ████████        (setCursor(0,1)) — 8 blok dari 16 unt
 
 ### Pertanyaan 4: Tabel Pengamatan ADC dari Serial Monitor
 
-> **Catatan**: Nilai-nilai di bawah ini dihitung secara teoritis menggunakan rumus  
+> Catatan: Nilai-nilai di bawah ini dihitung secara teoritis menggunakan rumus  
 > `Volt = ADC × (5.0 / 1023)` dan `Persen = ADC × (100 / 1023)`
 
 | ADC  | Volt (V) | Persen (%) |
@@ -286,7 +286,7 @@ Baris 2: ████████        (setCursor(0,1)) — 8 blok dari 16 unt
 
 ### Pertanyaan 1: Keuntungan dan kerugian UART vs I2C
 
-#### UART
+**UART**
 | ✅ Keuntungan | ❌ Kerugian |
 |---------------|------------|
 | Implementasi sangat sederhana, tidak butuh library khusus | Hanya point-to-point (1 master, 1 slave) |
@@ -294,7 +294,7 @@ Baris 2: ████████        (setCursor(0,1)) — 8 blok dari 16 unt
 | Kecepatan dapat disesuaikan (300 bps – 2 Mbps) | Membutuhkan 2 jalur data (TX + RX) |
 | Asinkron – tidak butuh sinyal clock | Tidak ada mekanisme deteksi kesalahan yang built-in |
 
-#### I2C
+**I2C**
 | ✅ Keuntungan | ❌ Kerugian |
 |---------------|------------|
 | Hanya 2 kabel untuk banyak perangkat | Kecepatan lebih rendah dari SPI (maks 400kHz standar) |
@@ -302,13 +302,11 @@ Baris 2: ████████        (setCursor(0,1)) — 8 blok dari 16 unt
 | Mendukung multi-master dan multi-slave | Konflik alamat jika dua perangkat punya alamat default sama |
 | Built-in ACK/NACK untuk deteksi error | Protokol lebih kompleks dibanding UART |
 
-Sumber: [[2]](#referensi) [[3]](#referensi)
-
 ---
 
 ### Pertanyaan 2: Peran alamat I2C (0x27 vs 0x20)
 
-Alamat I2C berfungsi sebagai **identitas unik** setiap perangkat slave di bus I2C. Analoginya seperti nomor rumah di satu jalan: postman (Arduino) hanya akan mengantar paket ke rumah dengan nomor yang tepat, sementara rumah lain mengabaikan.
+Alamat I2C berfungsi sebagai identitas unik setiap perangkat slave di bus I2C. Analoginya seperti nomor rumah di satu jalan: postman (Arduino) hanya akan mengantar paket ke rumah dengan nomor yang tepat, sementara rumah lain mengabaikan.
 
 **Mekanisme:**
 1. Arduino mengirimkan 7-bit alamat target di setiap transaksi
@@ -316,8 +314,8 @@ Alamat I2C berfungsi sebagai **identitas unik** setiap perangkat slave di bus I2
 3. Slave lain tidak bereaksi
 
 **LCD dengan chip PCF8574:**
-- **NXP PCF8574**: alamat default **0x27** (bila A0=A1=A2=HIGH via pull-up)
-- **TI PCF8574**: alamat default **0x3F** atau **0x20**
+- **NXP PCF8574**: alamat default 0x27 (bila A0=A1=A2=HIGH via pull-up)
+- **TI PCF8574**: alamat default 0x3F atau 0x20
 
 **Mengubah alamat**: Pin A0, A1, A2 pada chip PCF8574 dapat di-ground atau di-VCC untuk mengubah 3 bit terakhir alamat. Ini memungkinkan hingga 8 LCD dengan chip yang sama dihubungkan ke bus I2C yang sama secara bersamaan [[4]](#referensi).
 
@@ -358,7 +356,7 @@ Alamat = 0 1 0 0 A2 A1 A0
 ```
 
 **Mengapa tidak konflik?**
-- UART menggunakan modul **USART** (hardware terpisah) dengan interupsi dan buffer sendiri
-- I2C menggunakan modul **TWI** (Two-Wire Interface, hardware terpisah) dengan register kontrol sendiri
+- UART menggunakan modul USART (hardware terpisah) dengan interupsi dan buffer sendiri
+- I2C menggunakan modul TWI (Two-Wire Interface, hardware terpisah) dengan register kontrol sendiri
 - Keduanya beroperasi secara independen pada hardware yang berbeda di dalam chip ATmega328P
 - CPU hanya mengatur kapan data dikirim ke masing-masing modul
