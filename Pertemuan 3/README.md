@@ -30,7 +30,7 @@ Seluruh proses ini terjadi dalam hitungan milidetik.
 
 **Akibat jika baris `Serial.available()` dihilangkan:**
 - Serial Monitor akan dibanjiri pesan "Perintah tidak dikenal" karena `Serial.read()` terus mengembalikan -1 saat tidak ada data.
-- Sistem menjadi tidak efisien dan output sulit dibaca [[3]](#referensi).
+- Sistem menjadi tidak efisien dan output sulit dibaca.
 
 ---
 
