@@ -11,9 +11,13 @@ Setiap langkah komparasi membutuhkan satu clock ADC, sehingga total konversi 10-
 Beberapa faktor yang dapat memengaruhi akurasi pembacaan ADC antara lain:
 
 •	Noise Elektromagnetik (EMI): Kabel panjang yang terhubung ke pin analog bertindak sebagai antena yang menangkap interferensi elektromagnetik dari sumber seperti motor, charger, dan sinyal radio, menyebabkan fluktuasi nilai ADC.
+
 •	Impedansi Sumber Sinyal: ADC Arduino memiliki impedansi masukan yang terbatas. Jika impedansi sumber sinyal terlalu tinggi (>10 kΩ), kapasitor sample-and-hold tidak akan terisi penuh dalam waktu sampling, menghasilkan pembacaan yang lebih rendah dari nilai sebenarnya.
+
 •	Ketidakstabilan Tegangan Referensi: ADC Arduino menggunakan VCC (5 V) sebagai referensi secara default. Jika tegangan suplai berfluktuasi akibat beban berubah (misalnya motor aktif), seluruh skala pengukuran ADC ikut bergeser.
+
 •	Kuantisasi Error: Karena ADC hanya dapat merepresentasikan tegangan dalam 1024 nilai diskret, terdapat error kuantisasi maksimum sebesar °0,5 LSB atau sekitar ±2,4 mV pada resolusi 5V/1024 ≈14,9 mV.
+
 •	Crosstalk antar Pin: Pembacaan ADC yang cepat pada beberapa pin secara bergantian dapat menyebabkan crosstalk karena kapasitor sample-and-hold belum sepenuhnya habis dari pembacaan sebelumnya.
 
 ---
@@ -23,8 +27,11 @@ Beberapa faktor yang dapat memengaruhi akurasi pembacaan ADC antara lain:
 Integrasi ADC dan PWM dalam satu sistem Arduino dapat menimbulkan beberapa kendala:
 
 •	Interferensi PWM pada ADC: Sinyal PWM yang berfrekuensi tinggi dapat menginduksi noise pada jalur sinyal analog melalui kopling kapasitif atau induktif, terutama jika kabel sinyal analog berdekatan dengan pin PWM. Hal ini menyebabkan nilai ADC berfluktuasi sinkron dengan frekuensi PWM.
+
 •	Berbagi Timer Hardware: Arduino Uno menggunakan beberapa timer hardware (Timer0, Timer1, Timer2) untuk menghasilkan sinyal PWM pada pin-pin berbeda. Penggunaan library Servo.h memanfaatkan Timer1, sehingga pin PWM yang bergantung pada Timer1 (pin 9 dan 10) tidak lagi dapat digunakan untuk analogWrite() saat library Servo aktif.
+
 •	Timing dan Latensi: Jika delay() digunakan untuk stabilisasi servo atau LED, pembacaan ADC menjadi tidak responsif selama periode delay. Pada sistem yang membutuhkan respons cepat, delay dapat digantikan dengan pendekatan non-blocking menggunakan millis().
+
 •	Konsumsi Daya: Servo motor dapat menarik arus yang cukup besar (hingga 500 mA atau lebih saat berbeban), yang dapat menyebabkan drop tegangan pada VCC Arduino dan memengaruhi akurasi ADC. Disarankan menggunakan catu daya terpisah untuk servo.
 
 ---
