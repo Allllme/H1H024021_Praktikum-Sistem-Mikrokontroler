@@ -2,7 +2,7 @@
 ### Bagaimana proses konversi sinyal analog menjadi digital pada Arduino? Jelaskan!
 
 Arduino Uno menggunakan ADC successive approximation register (SAR) 10-bit yang terintegrasi dalam chip ATmega328P. Proses konversi dimulai ketika fungsi analogRead() dipanggil, mikrokontroler akan memilih pin analog yang ditentukan menggunakan multiplexer internal, kemudian mengisi kapasitor sample-and-hold dengan tegangan dari pin tersebut. ADC SAR kemudian membandingkan tegangan yang tersimpan dengan tegangan referensi secara bertahap dari bit paling signifikan (MSB) hingga bit paling tidak signifikan (LSB) menggunakan komparator analog internal.
-Setiap langkah komparasi membutuhkan satu clock ADC, sehingga total konversi 10-bit memerlukan 13 clock ADC. Dengan prescaler default yang menghasilkan clock ADC sekitar 125 kHz pada Arduino, satu konversi memerlukan waktu sekitar 104 μs atau laju sampling sekitar 9600 sampel per detik [2]. Hasil konversi disimpan dalam register ADCH dan ADCL, lalu dikembalikan sebagai nilai integer oleh fungsi analogRead().
+Setiap langkah komparasi membutuhkan satu clock ADC, sehingga total konversi 10-bit memerlukan 13 clock ADC. Dengan prescaler default yang menghasilkan clock ADC sekitar 125 kHz pada Arduino, satu konversi memerlukan waktu sekitar 104 μs atau laju sampling sekitar 9600 sampel per detik. Hasil konversi disimpan dalam register ADCH dan ADCL, lalu dikembalikan sebagai nilai integer oleh fungsi analogRead().
 
 ---
 
