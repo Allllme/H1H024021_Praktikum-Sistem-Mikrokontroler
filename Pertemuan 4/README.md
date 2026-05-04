@@ -123,14 +123,6 @@ void loop() {
 
 ---
 
-# Percobaan 2: Pulse Width Modulation (PWM)
-
-## 🎯 Tujuan
-- Memahami konsep dasar PWM (Pulse Width Modulation) sebagai metode untuk menghasilkan sinyal analog semu dari keluaran digital Arduino.
-- Mengetahui cara kerja fungsi `analogWrite()` pada Arduino Uno dalam menghasilkan variasi duty cycle.
-
----
-
 
 ## Pertanyaan Praktikum 4B
 
