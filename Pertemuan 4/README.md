@@ -1,39 +1,29 @@
 ## Pertanyaan Praktikum
-### Bagaimana proses konversi sinyal analog menjadi digital pada Arduino? Jelaskan!
+### 1. Bagaimana proses konversi sinyal analog menjadi digital pada Arduino? Jelaskan!
 
-Arduino Uno menggunakan ADC successive approximation register (SAR) 10-bit yang terintegrasi dalam chip ATmega328P. Proses konversi dimulai ketika fungsi analogRead() dipanggil, mikrokontroler akan memilih pin analog yang ditentukan menggunakan multiplexer internal, kemudian mengisi kapasitor sample-and-hold dengan tegangan dari pin tersebut. ADC SAR kemudian membandingkan tegangan yang tersimpan dengan tegangan referensi secara bertahap dari bit paling signifikan (MSB) hingga bit paling tidak signifikan (LSB) menggunakan komparator analog internal.
+Arduino Uno menggunakan ADC 10-bit yang ada di dalam chip ATmega328P. Cara kerjanya secara garis besar dimulai dari membaca tegangan yang masuk di pin analog, lalu mengubahnya jadi angka antara 0 sampai 1023. Kalau tegangannya 0V hasilnya 0, kalau 5V hasilnya 1023, dan seterusnya secara proporsional.
 
-Setiap langkah komparasi membutuhkan satu clock ADC, sehingga total konversi 10-bit memerlukan 13 clock ADC. Dengan prescaler default yang menghasilkan clock ADC sekitar 125 kHz pada Arduino, satu konversi memerlukan waktu sekitar 104 μs atau laju sampling sekitar 9600 sampel per detik. Hasil konversi disimpan dalam register ADCH dan ADCL, lalu dikembalikan sebagai nilai integer oleh fungsi analogRead().
+Prosesnya sendiri ada tiga tahap. Pertama sampling, yaitu nilai tegangan diambil sesaat dan ditahan. Kedua quantization, nilai tegangan itu dipetakan ke salah satu dari 1024 level yang tersedia, di mana tiap levelnya mewakili sekitar 4,88 mV. Ketiga encoding, hasilnya diubah jadi bilangan biner 10-bit yang bisa dibaca lewat fungsi `analogRead()`.
 
----
-
-### Faktor apa saja yang dapat mempengaruhi keakuratan pembacaan ADC?
-
-Beberapa faktor yang dapat memengaruhi akurasi pembacaan ADC antara lain:
-
-•	Noise Elektromagnetik (EMI): Kabel panjang yang terhubung ke pin analog bertindak sebagai antena yang menangkap interferensi elektromagnetik dari sumber seperti motor, charger, dan sinyal radio, menyebabkan fluktuasi nilai ADC.
-
-•	Impedansi Sumber Sinyal: ADC Arduino memiliki impedansi masukan yang terbatas. Jika impedansi sumber sinyal terlalu tinggi (>10 kΩ), kapasitor sample-and-hold tidak akan terisi penuh dalam waktu sampling, menghasilkan pembacaan yang lebih rendah dari nilai sebenarnya.
-
-•	Ketidakstabilan Tegangan Referensi: ADC Arduino menggunakan VCC (5 V) sebagai referensi secara default. Jika tegangan suplai berfluktuasi akibat beban berubah (misalnya motor aktif), seluruh skala pengukuran ADC ikut bergeser.
-
-•	Kuantisasi Error: Karena ADC hanya dapat merepresentasikan tegangan dalam 1024 nilai diskret, terdapat error kuantisasi maksimum sebesar °0,5 LSB atau sekitar ±2,4 mV pada resolusi 5V/1024 ≈14,9 mV.
-
-•	Crosstalk antar Pin: Pembacaan ADC yang cepat pada beberapa pin secara bergantian dapat menyebabkan crosstalk karena kapasitor sample-and-hold belum sepenuhnya habis dari pembacaan sebelumnya.
+Pada percobaan ini hal tersebut terlihat ketika potensiometer diputar, nilai yang muncul di Serial Monitor berubah dari 0 ke 1023 dan servo bergerak mengikuti secara proporsional.
 
 ---
 
-### Apa kendala yang mungkin terjadi saat mengintegrasikan ADC dan PWM dalam satu sistem?
+### 2. Faktor apa saja yang dapat mempengaruhi keakuratan pembacaan ADC?
 
-Integrasi ADC dan PWM dalam satu sistem Arduino dapat menimbulkan beberapa kendala:
+Ada beberapa hal yang bisa mempengaruhi hasil pembacaan ADC. Yang pertama adalah noise atau gangguan dari komponen lain. Waktu servo bergerak misalnya, ada fluktuasi arus yang bisa sedikit mengganggu tegangan referensi ADC sehingga hasilnya jadi tidak stabil. Ini yang menyebabkan nilai di Serial Monitor kadang bergetar meski potensiometer tidak disentuh.
 
-•	Interferensi PWM pada ADC: Sinyal PWM yang berfrekuensi tinggi dapat menginduksi noise pada jalur sinyal analog melalui kopling kapasitif atau induktif, terutama jika kabel sinyal analog berdekatan dengan pin PWM. Hal ini menyebabkan nilai ADC berfluktuasi sinkron dengan frekuensi PWM.
+Selain itu, resolusi 10-bit juga punya batasan tersendiri karena perubahan tegangan di bawah 4,88 mV tidak akan terdeteksi sama sekali. Impedansi sumber sinyal juga berpengaruh, kalau resistansinya terlalu tinggi maka proses sampling tidak berjalan sempurna dan hasilnya bisa lebih kecil dari seharusnya. Terakhir adalah kestabilan tegangan referensi, karena ADC menghitung berdasarkan tegangan 5V, kalau tegangan itu sedikit naik turun maka hasil konversinya ikut terpengaruh.
 
-•	Berbagi Timer Hardware: Arduino Uno menggunakan beberapa timer hardware (Timer0, Timer1, Timer2) untuk menghasilkan sinyal PWM pada pin-pin berbeda. Penggunaan library Servo.h memanfaatkan Timer1, sehingga pin PWM yang bergantung pada Timer1 (pin 9 dan 10) tidak lagi dapat digunakan untuk analogWrite() saat library Servo aktif.
+---
 
-•	Timing dan Latensi: Jika delay() digunakan untuk stabilisasi servo atau LED, pembacaan ADC menjadi tidak responsif selama periode delay. Pada sistem yang membutuhkan respons cepat, delay dapat digantikan dengan pendekatan non-blocking menggunakan millis().
+### 3. Apa kendala yang mungkin terjadi saat mengintegrasikan ADC dan PWM dalam satu sistem?
 
-•	Konsumsi Daya: Servo motor dapat menarik arus yang cukup besar (hingga 500 mA atau lebih saat berbeban), yang dapat menyebabkan drop tegangan pada VCC Arduino dan memengaruhi akurasi ADC. Disarankan menggunakan catu daya terpisah untuk servo.
+Kendala yang paling terasa adalah interferensi sinyal PWM terhadap pembacaan ADC. Sinyal PWM yang berswitching dengan cepat bisa menginduksi gangguan ke jalur sinyal analog, terutama kalau kabelnya berdekatan. Akibatnya nilai `analogRead()` jadi sedikit tidak stabil meski potensiometer tidak digerakkan.
+
+Masalah lain yang bisa muncul adalah gangguan pada catu daya. Komponen seperti servo atau LED yang menarik arus cukup besar melalui PWM bisa menyebabkan tegangan 5V Arduino sedikit turun sesaat, dan karena itu dipakai sebagai referensi ADC, pembacaannya ikut terganggu.
+
+Ada juga soal perbedaan resolusi antara ADC (0–1023) dan PWM (0–255). Waktu nilainya dipetakan pakai `map()`, tiap perubahan 4 angka di ADC baru menghasilkan perubahan 1 angka di PWM, jadi outputnya tidak selalu berubah mulus untuk perubahan input yang kecil. Selain itu penggunaan timer internal juga perlu diperhatikan karena PWM, `delay()`, dan library Servo semuanya berbagi timer yang sama dan bisa saling konflik jika tidak dikelola dengan baik.
 
 ---
 
