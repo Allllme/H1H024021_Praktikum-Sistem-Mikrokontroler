@@ -1,4 +1,4 @@
-## Pertanyaan Praktikum 2A ##
+## Jawaban Pertanyaan Praktikum 2A ##
 **1. Gambarkan rangkaian schematic yang digunakan!**
 
 Schematic menghubungkan 0-9 segmen seven segment (a–f, dp) masing-masing melalui resistor 220Ω ke pin digital Arduino sesuai tabel wiring. Pin common cathode dihubungkan ke GND Arduino. Resistor 220Ω berfungsi membatasi arus agar tidak melebihi batas aman LED (~20mA): R = (5V – 2V) / 0,02A = 150Ω → pilih 220Ω.
@@ -98,7 +98,7 @@ void loop() {
 ---
 
 
-## Pertanyaan Praktikum 2B ##
+## Jawaban Pertanyaan Praktikum 2B ##
 
 **1. Gambarkan rangkaian schematic yang digunakan!**
 
@@ -273,7 +273,7 @@ void loop() {
 ---
 
 
-## Pertanyaan Umum (Bagian 2.7) ##
+## Jawaban Pertanyaan Umum (Bagian 2.7) ##
 
 **1. Uraikan hasil tugas pada praktikum setiap percobaan!**
 
