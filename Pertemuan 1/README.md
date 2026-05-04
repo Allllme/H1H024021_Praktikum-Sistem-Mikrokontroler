@@ -1,4 +1,4 @@
-## Pertanyaan Praktikum 1A
+## Jawaban Pertanyaan Praktikum 1A
 ### 1. Pada kondisi apa program masuk ke blok if?
 Program masuk ke blok if ketika nilai variabel timeDelay sudah ≤ 100 ms. Ini berarti LED telah mencapai kecepatan kerlip maksimum. Pada kondisi ini, program akan memberikan jeda 3 detik lalu mereset timeDelay kembali ke 1000 ms.
 
@@ -69,7 +69,7 @@ if (timeDelay <= 100) {
 ---
 
 
-## Pertanyaan Praktikum 1B
+## Jawaban Pertanyaan Praktikum 1B
 ### Schematic
 ![WhatsApp Image 2026-04-08 at 23 29 50](https://github.com/user-attachments/assets/56a430a0-51dc-4f4a-ae57-c7eda7bdfb3e)
 
@@ -136,7 +136,7 @@ for (int ledPin = 7; ledPin >= 2; ledPin--) {
 ---
 
 
-## Pertanyaan Analisis
+## Jawaban Pertanyaan Analisis
 ### 1. Uraikan hasil tugas pada praktikum yang telah dilakukan pada setiap percobaan!
 
 #### 🔴 Percobaan 1A — Percabangan (if-else)
