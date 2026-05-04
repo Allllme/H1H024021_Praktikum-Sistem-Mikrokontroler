@@ -123,6 +123,7 @@ Iterasi M (t=501ms)  : Serial.available() → '0' diterima → blinkMode = false
 
 ---
 
+
 ## Jawaban Pertanyaan Praktikum 3B
 
 ### Pertanyaan 1: Cara kerja komunikasi I2C antara Arduino dan LCD
@@ -282,6 +283,7 @@ Baris 2: ████████        (setCursor(0,1)) — 8 blok dari 16 unt
 
 ---
 
+
 ## Pertanyaan Umum Modul 3
 
 ### Pertanyaan 1: Keuntungan dan kerugian UART vs I2C
@@ -314,8 +316,8 @@ Alamat I2C berfungsi sebagai identitas unik setiap perangkat slave di bus I2C. A
 3. Slave lain tidak bereaksi
 
 **LCD dengan chip PCF8574:**
-- **NXP PCF8574**: alamat default 0x27 (bila A0=A1=A2=HIGH via pull-up)
-- **TI PCF8574**: alamat default 0x3F atau 0x20
+- NXP PCF8574: alamat default 0x27 (bila A0=A1=A2=HIGH via pull-up)
+- TI PCF8574: alamat default 0x3F atau 0x20
 
 **Mengubah alamat**: Pin A0, A1, A2 pada chip PCF8574 dapat di-ground atau di-VCC untuk mengubah 3 bit terakhir alamat. Ini memungkinkan hingga 8 LCD dengan chip yang sama dihubungkan ke bus I2C yang sama secara bersamaan [[4]](#referensi).
 
