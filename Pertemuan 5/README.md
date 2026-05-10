@@ -122,6 +122,7 @@ Solusinya adalah menggunakan `xSemaphoreTake()` / `xSemaphoreGive()` (mutex) unt
 
 ### Modifikasi dengan sensor DHT sesungguhnya
 
+```cpp
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 #include <DHT.h>
@@ -172,7 +173,7 @@ void display(void *pvParameters) {
     }
   }
 }
-
+```
 **Hasilnya:** Serial Monitor menampilkan nilai suhu dan kelembaban yang dinamis dan berubah sesuai kondisi lingkungan nyata, membuktikan bahwa queue mampu meneruskan data sensor real-time secara aman antar-task.
 
 ---
