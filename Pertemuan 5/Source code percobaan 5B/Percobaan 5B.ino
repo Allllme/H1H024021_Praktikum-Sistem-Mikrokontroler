@@ -1,53 +1,55 @@
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 
-// Struct untuk menyimpan data sensor (suhu dan kelembaban)
-struct readings {
-  int temp;
-  int h;
+struct readings{
+    int temp;
+    int h;
 };
 
-QueueHandle_t my_queue; // Handle untuk queue komunikasi antar-task
+QueueHandle_t my_queue;
 
 void setup() {
-  Serial.begin(9600);
+    Serial.begin(9600);
 
-  // Membuat queue dengan kapasitas 1 item bertipe struct readings
-  my_queue = xQueueCreate(1, sizeof(struct readings));
+    my_queue = xQueueCreate(1, sizeof(struct readings));
 
-  // Task producer: membaca data sensor
-  xTaskCreate(read_data, "read sensors", 128, NULL, 0, NULL);
-
-  // Task consumer: menampilkan data ke Serial Monitor
-  xTaskCreate(display, "display", 128, NULL, 0, NULL);
+    xTaskCreate(read_data, "read sensors", 128, NULL, 0, NULL);
+    xTaskCreate(display, "display", 128, NULL, 0, NULL);
 }
 
 void loop() {}
 
-// Task Producer: mengirim data sensor ke queue
-void read_data(void *pvParameters) {
-  struct readings x;
-  for (;;) {
-    x.temp = 54;   // Nilai statis (ganti dengan sensor DHT untuk modifikasi)
-    x.h = 30;
+/*
+ *
+ * Blink task.
+ * See Blink_AnalogRead example.
+ *
+ */
 
-    // Kirim data ke queue; tunggu hingga queue kosong (portMAX_DELAY)
-    xQueueSend(my_queue, &x, portMAX_DELAY);
+void read_data(void *pvParameters){
+    struct readings x;
 
-    vTaskDelay(100); // Periode sampling 100ms
-  }
+    for(;;){
+        x.temp = 54;
+        x.h = 30;
+
+        xQueueSend(my_queue, &x, portMAX_DELAY);
+        vTaskDelay(100);
+    }
 }
 
-// Task Consumer: menerima dan menampilkan data dari queue
-void display(void *pvParameters) {
-  struct readings x;
-  for (;;) {
-    // Tunggu data dari queue; blokir hingga data tersedia
-    if (xQueueReceive(my_queue, &x, portMAX_DELAY) == pdPASS) {
-      Serial.print("temp = ");
-      Serial.println(x.temp);
-      Serial.print("humidity = ");
-      Serial.println(x.h);
+void display(void *pvParameters){
+
+    struct readings x;
+
+    for(;;){
+        if(xQueueReceive(my_queue, &x, portMAX_DELAY) == pdPASS){
+
+            Serial.print("temp = ");
+            Serial.println(x.temp);
+
+            Serial.print("humidity = ");
+            Serial.println(x.h);
+        }
     }
-  }
 }
