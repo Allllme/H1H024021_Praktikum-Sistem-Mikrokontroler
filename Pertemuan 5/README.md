@@ -122,7 +122,58 @@ Solusinya adalah menggunakan `xSemaphoreTake()` / `xSemaphoreGive()` (mutex) unt
 
 ### Modifikasi dengan sensor DHT sesungguhnya
 
-Lihat kode `modul6_taskqueue_dht.ino` di atas. **Hasilnya:** Serial Monitor menampilkan nilai suhu dan kelembaban yang dinamis dan berubah sesuai kondisi lingkungan nyata, membuktikan bahwa queue mampu meneruskan data sensor real-time secara aman antar-task.
+#include <Arduino_FreeRTOS.h>
+#include <queue.h>
+#include <DHT.h>
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+struct readings {
+  float temp;
+  float h;
+};
+
+QueueHandle_t my_queue;
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  my_queue = xQueueCreate(1, sizeof(struct readings));
+  xTaskCreate(read_data, "read sensors", 128, NULL, 0, NULL);
+  xTaskCreate(display, "display", 128, NULL, 0, NULL);
+}
+
+void loop() {}
+
+void read_data(void *pvParameters) {
+  struct readings x;
+  for (;;) {
+    x.temp = dht.readTemperature(); // Baca suhu (°C)
+    x.h    = dht.readHumidity();    // Baca kelembaban (%)
+    if (!isnan(x.temp) && !isnan(x.h)) {
+      xQueueSend(my_queue, &x, portMAX_DELAY);
+    }
+    vTaskDelay(2000 / portTICK_PERIOD_MS); // DHT11 butuh minimal 2s antar baca
+  }
+}
+
+void display(void *pvParameters) {
+  struct readings x;
+  for (;;) {
+    if (xQueueReceive(my_queue, &x, portMAX_DELAY) == pdPASS) {
+      Serial.print("Suhu: ");
+      Serial.print(x.temp);
+      Serial.print(" °C | Kelembaban: ");
+      Serial.print(x.h);
+      Serial.println(" %");
+    }
+  }
+}
+
+**Hasilnya:** Serial Monitor menampilkan nilai suhu dan kelembaban yang dinamis dan berubah sesuai kondisi lingkungan nyata, membuktikan bahwa queue mampu meneruskan data sensor real-time secara aman antar-task.
 
 ---
 
