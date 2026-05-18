@@ -1,5 +1,3 @@
-kode 6A:
-
 #include <Arduino.h>
 
 // Variabel volatile agar dapat diubah dalam ISR
